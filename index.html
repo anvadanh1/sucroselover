@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tải Video TikTok Không Watermark</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fab fa-tiktok"></i> TikTok Downloader</h1>
+            <p class="tagline">Dán link video TikTok để tải về không watermark, chất lượng cao.</p>
+        </header>
+
+        <main>
+            <div class="input-section">
+                <input type="text" id="urlInput" placeholder="https://vm.tiktok.com/xxxxx/" autofocus>
+                <button id="downloadBtn">
+                    <i class="fas fa-download"></i> Tải Video
+                </button>
+                <p class="hint">Ví dụ: https://vm.tiktok.com/ZSY5gRqNf/ hoặc https://www.tiktok.com/@user/video/123456789</p>
+            </div>
+
+            <div class="result-section hidden" id="resultSection">
+                <div class="loading" id="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Đang xử lý...
+                </div>
+                <div class="success" id="success">
+                    <h3><i class="fas fa-check-circle"></i> Thành công!</h3>
+                    <div class="video-preview" id="videoPreview">
+                        <!-- Video sẽ hiển thị ở đây -->
+                    </div>
+                    <div class="video-info" id="videoInfo">
+                        <!-- Thông tin video -->
+                    </div>
+                    <a class="download-link" id="downloadLink" target="_blank" download>
+                        <i class="fas fa-arrow-down"></i> Tải Video Ngay
+                    </a>
+                    <p class="format-info">Định dạng: MP4 (HD) - Không Watermark</p>
+                </div>
+                <div class="error hidden" id="error">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Có lỗi xảy ra!</h3>
+                    <p id="errorMessage"></p>
+                    <button onclick="retryProcess()">Thử lại</button>
+                </div>
+            </div>
+
+            <div class="notice">
+                <h4><i class="fas fa-info-circle"></i> Lưu ý quan trọng:</h4>
+                <ul>
+                    <li>Chỉ sử dụng cho video <strong>công khai</strong>. Video riêng tư không tải được.</li>
+                    <li>Chỉ tải video cho mục đích <strong>cá nhân</strong>. Tôn trọng bản quyền của người sáng tạo.</li>
+                    <li>Công cụ này <strong>không lưu trữ</strong> video của bạn.</li>
+                </ul>
+            </div>
+        </main>
+
+        <footer>
+            <p>Được cung cấp bởi TikTok Video Downloader API | Host trên GitHub Pages</p>
+            <p class="disclaimer">
+                <strong>Disclaimer:</strong> Công cụ này độc lập, không liên kết với TikTok. TikTok là nhãn hiệu đã đăng ký của ByteDance Ltd.
+            </p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
