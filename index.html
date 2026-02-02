@@ -270,11 +270,20 @@
         </div>
 
         <div id="progressContainer" class="progress-container" style="display: none;"></div>
+        
+        <div id="autoDownloadSection" style="display: none; text-align: center; margin: 20px 0;">
+            <button onclick="autoDownloadAll()" style="width: 100%; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); font-size: 18px; padding: 20px;">
+                🚀 Tự động tải xuống tất cả video (HD)
+            </button>
+            <p style="color: #666; margin-top: 10px; font-size: 14px;">Tất cả video sẽ được tải xuống tự động vào thư mục Downloads</p>
+        </div>
+
         <div id="results" class="results"></div>
     </div>
 
     <script>
         let urlList = [];
+        let downloadedVideos = [];
 
         function addUrl() {
             const input = document.getElementById('urlInput');
@@ -331,12 +340,15 @@
 
             const resultsDiv = document.getElementById('results');
             const progressContainer = document.getElementById('progressContainer');
+            const autoDownloadSection = document.getElementById('autoDownloadSection');
             const downloadBtn = document.getElementById('downloadAllBtn');
 
             resultsDiv.innerHTML = '';
             progressContainer.style.display = 'block';
             progressContainer.innerHTML = '';
+            autoDownloadSection.style.display = 'none';
             downloadBtn.disabled = true;
+            downloadedVideos = [];
 
             for (let i = 0; i < urlList.length; i++) {
                 const url = urlList[i];
@@ -356,6 +368,12 @@
             }
 
             downloadBtn.disabled = false;
+            
+            // Hiển thị nút tự động tải xuống nếu có video
+            if (downloadedVideos.length > 0) {
+                autoDownloadSection.style.display = 'block';
+                autoDownloadSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
         }
 
         async function downloadVideo(url, index, progressId) {
@@ -368,7 +386,7 @@
                 statusDiv.textContent = 'Đang lấy thông tin video...';
 
                 // API để tải video TikTok không watermark
-                const apiUrl = `https://www.tikwm.com/api/?url=${encodeURIComponent(url)}`;
+                const apiUrl = `https://www.tikwm.com/api/?url=${encodeURIComponent(url)}&hd=1`;
                 
                 progressFill.style.width = '60%';
                 const response = await fetch(apiUrl);
@@ -381,6 +399,12 @@
                 progressFill.style.width = '100%';
                 statusDiv.className = 'status success';
                 statusDiv.textContent = 'Hoàn thành!';
+
+                // Lưu thông tin video để tải sau
+                downloadedVideos.push({
+                    data: data.data,
+                    index: index
+                });
 
                 displayVideoResult(data.data, index);
 
@@ -401,8 +425,69 @@
             }
         }
 
+        async function downloadFileDirectly(url, filename) {
+            try {
+                const response = await fetch(url);
+                const blob = await response.blob();
+                const blobUrl = window.URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(blobUrl);
+                
+                return true;
+            } catch (error) {
+                console.error('Download error:', error);
+                // Fallback: mở trong tab mới
+                window.open(url, '_blank');
+                return false;
+            }
+        }
+
+        async function autoDownloadAll() {
+            if (downloadedVideos.length === 0) {
+                alert('Không có video nào để tải!');
+                return;
+            }
+
+            const button = event.target;
+            button.disabled = true;
+            button.textContent = '⏳ Đang tải xuống...';
+
+            for (let i = 0; i < downloadedVideos.length; i++) {
+                const videoInfo = downloadedVideos[i];
+                const videoData = videoInfo.data;
+                
+                // Sử dụng hdplay nếu có, không thì dùng play
+                const videoUrl = videoData.hdplay || videoData.play;
+                const filename = `tiktok_${videoData.author?.unique_id || 'video'}_${videoData.id || i}.mp4`;
+                
+                // Delay giữa các lần tải để tránh quá tải
+                if (i > 0) {
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                }
+                
+                await downloadFileDirectly(videoUrl, filename);
+            }
+
+            button.disabled = false;
+            button.textContent = '✅ Đã tải xong tất cả!';
+            
+            setTimeout(() => {
+                button.textContent = '🚀 Tự động tải xuống tất cả video (HD)';
+            }, 3000);
+        }
+
         function displayVideoResult(videoData, index) {
             const resultsDiv = document.getElementById('results');
+            
+            // Sử dụng hdplay (HD) nếu có, không thì dùng play (SD)
+            const videoUrl = videoData.hdplay || videoData.play;
+            const quality = videoData.hdplay ? 'HD' : 'SD';
             
             const videoCard = document.createElement('div');
             videoCard.className = 'video-card';
@@ -415,13 +500,14 @@
                     <div class="video-meta">🔄 Chia sẻ: ${formatNumber(videoData.share_count || 0)}</div>
                     <div class="video-meta">▶️ Lượt xem: ${formatNumber(videoData.play_count || 0)}</div>
                     <div class="video-meta">⏱️ Thời lượng: ${videoData.duration || 0}s</div>
+                    <div class="video-meta" style="color: #667eea; font-weight: bold;">🎬 Chất lượng: ${quality}</div>
                 </div>
                 ${videoData.cover ? `<img src="${videoData.cover}" class="video-preview" alt="Video preview">` : ''}
-                <button class="download-btn" onclick="window.open('${videoData.play}', '_blank')">
-                    ⬇️ Tải video (Không Watermark)
+                <button class="download-btn" onclick="downloadFileDirectly('${videoUrl}', 'tiktok_${videoData.author?.unique_id || 'video'}_${videoData.id || index}.mp4')">
+                    ⬇️ Tải video ${quality} (Không Watermark)
                 </button>
                 ${videoData.music ? `
-                    <button class="download-btn" onclick="window.open('${videoData.music}', '_blank')">
+                    <button class="download-btn" onclick="downloadFileDirectly('${videoData.music}', 'tiktok_music_${index}.mp3')">
                         🎵 Tải nhạc nền
                     </button>
                 ` : ''}
