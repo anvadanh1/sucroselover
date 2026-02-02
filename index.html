@@ -3,613 +3,448 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tải Video TikTok Không Watermark - 100% Web Tĩnh</title>
+    <title>TikTok Downloader - Tải Video Không Watermark</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
             min-height: 100vh;
             padding: 20px;
         }
+
         .container {
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            overflow: hidden;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
-        header {
-            background: linear-gradient(to right, #fe2c55, #25d3ea);
-            color: white;
-            padding: 30px;
+
+        h1 {
             text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
         }
-        h1 { font-size: 2.5rem; margin-bottom: 10px; }
-        .subtitle { font-size: 1.1rem; opacity: 0.9; }
-        main { padding: 30px; }
-        .card {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 25px;
+
+        .subtitle {
+            text-align: center;
+            color: #666;
             margin-bottom: 30px;
-            border: 1px solid #e9ecef;
+            font-size: 1.1em;
         }
-        h2 { color: #fe2c55; margin-bottom: 20px; font-size: 1.5rem; }
-        .input-group { margin-bottom: 20px; }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #495057;
+
+        .input-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
         }
-        input[type="text"], textarea {
-            width: 100%;
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        input[type="text"] {
+            flex: 1;
             padding: 15px;
-            border: 2px solid #dee2e6;
+            border: 2px solid #ddd;
             border-radius: 10px;
             font-size: 16px;
-            transition: all 0.3s;
+            transition: border-color 0.3s;
         }
-        input[type="text"]:focus, textarea:focus {
-            border-color: #fe2c55;
+
+        input[type="text"]:focus {
             outline: none;
-            box-shadow: 0 0 0 3px rgba(254, 44, 85, 0.1);
+            border-color: #667eea;
         }
-        textarea {
-            height: 150px;
-            font-family: monospace;
-            resize: vertical;
-        }
-        .hint {
-            font-size: 0.9rem;
-            color: #6c757d;
-            margin-top: 5px;
-        }
-        .btn {
-            background: linear-gradient(to right, #fe2c55, #25d3ea);
+
+        button {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 16px 32px;
-            font-size: 18px;
-            font-weight: bold;
             border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        .btn:hover {
+
+        button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(254, 44, 85, 0.3);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
         }
-        .btn:disabled {
-            opacity: 0.6;
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            background: #ccc;
             cursor: not-allowed;
             transform: none;
         }
-        .btn-secondary {
-            background: #6c757d;
-            padding: 12px 24px;
-            font-size: 16px;
+
+        .url-list {
+            margin-top: 15px;
         }
-        .btn-group {
+
+        .url-item {
             display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-        #results {
-            margin-top: 40px;
-            display: none;
-        }
-        .video-card {
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
             background: white;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .url-text {
+            flex: 1;
+            color: #333;
+            font-size: 14px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .remove-btn {
+            padding: 5px 15px;
+            background: #ff4757;
+            font-size: 14px;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2196f3;
+        }
+
+        .info-box p {
+            color: #1976d2;
+            margin-bottom: 5px;
+        }
+
+        .results {
+            margin-top: 30px;
+        }
+
+        .video-card {
+            background: #f8f9fa;
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 20px;
-            border: 2px solid #e9ecef;
-            transition: all 0.3s;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
+            border: 1px solid #e0e0e0;
         }
-        .video-card:hover {
-            border-color: #fe2c55;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+
+        .video-info {
+            margin-bottom: 15px;
         }
-        .video-info { flex: 1; }
-        .video-title {
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #212529;
+
+        .video-info h3 {
+            color: #333;
+            margin-bottom: 10px;
         }
-        .video-url {
-            font-size: 0.9rem;
-            color: #6c757d;
-            word-break: break-all;
-        }
+
         .video-meta {
-            display: flex;
-            gap: 15px;
-            margin-top: 10px;
-            font-size: 0.9rem;
-            color: #495057;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
         }
-        .video-actions {
-            display: flex;
-            gap: 10px;
-            flex-shrink: 0;
-        }
-        .status {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: bold;
-        }
-        .status-pending { background: #fff3cd; color: #856404; }
-        .status-processing { background: #cce5ff; color: #004085; }
-        .status-success { background: #d4edda; color: #155724; }
-        .status-error { background: #f8d7da; color: #721c24; }
-        .loading {
-            text-align: center;
-            padding: 40px;
-            display: none;
-        }
-        .spinner {
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #fe2c55;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .api-selector {
-            display: flex;
-            gap: 15px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-        .api-option {
-            flex: 1;
-            min-width: 200px;
-        }
-        .api-option select {
+
+        .video-preview {
             width: 100%;
-            padding: 10px;
-            border: 2px solid #dee2e6;
-            border-radius: 8px;
-            font-size: 16px;
+            max-width: 300px;
+            border-radius: 10px;
+            margin: 15px 0;
         }
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: #6c757d;
-            font-size: 0.9rem;
-            border-top: 1px solid #e9ecef;
-            margin-top: 30px;
+
+        .download-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+            margin-top: 10px;
         }
-        .warning {
+
+        .status {
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        .status.loading {
             background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 0 8px 8px 0;
+            color: #856404;
         }
-        @media (max-width: 768px) {
-            .container { border-radius: 0; }
-            header { padding: 20px; }
-            h1 { font-size: 2rem; }
-            main { padding: 20px; }
-            .video-card { flex-direction: column; align-items: flex-start; }
-            .video-actions { width: 100%; justify-content: center; }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .progress-container {
+            margin-top: 20px;
+        }
+
+        .progress-item {
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>⬇️ Tải Video TikTok</h1>
-            <p class="subtitle">Công cụ web tĩnh 100% - Không backend - Không watermark - Đa luồng</p>
-        </header>
-        
-        <main>
-            <div class="warning">
-                <strong>⚠️ Lưu ý quan trọng:</strong> Công cụ này sử dụng API công khai miễn phí và có thể ngừng hoạt động nếu các dịch vụ đó thay đổi. Hãy tôn trọng bản quyền và chỉ tải video cho mục đích cá nhân.
+        <h1>🎵 TikTok Downloader</h1>
+        <p class="subtitle">Tải video TikTok không có watermark - Hỗ trợ tải nhiều video cùng lúc</p>
+
+        <div class="info-box">
+            <p><strong>📝 Hướng dẫn sử dụng:</strong></p>
+            <p>1. Sao chép link video TikTok từ ứng dụng (nhấn "Chia sẻ" → "Sao chép liên kết")</p>
+            <p>2. Dán link vào ô bên dưới và nhấn "Thêm vào danh sách"</p>
+            <p>3. Thêm nhiều link nếu muốn tải nhiều video cùng lúc</p>
+            <p>4. Nhấn "Tải tất cả video" để bắt đầu</p>
+        </div>
+
+        <div class="input-section">
+            <div class="input-group">
+                <input type="text" id="urlInput" placeholder="Dán link TikTok vào đây (vd: https://www.tiktok.com/@user/video/...)">
+                <button onclick="addUrl()">Thêm vào danh sách</button>
             </div>
             
-            <div class="card">
-                <h2>📥 Nhập Liên Kết TikTok</h2>
-                
-                <div class="input-group">
-                    <label for="singleUrl">Tải một video:</label>
-                    <input type="text" id="singleUrl" placeholder="https://www.tiktok.com/@username/video/1234567890" />
-                </div>
-                
-                <div class="input-group">
-                    <label for="batchUrls">Tải nhiều video cùng lúc (mỗi dòng một liên kết):</label>
-                    <textarea id="batchUrls" placeholder="https://www.tiktok.com/@user1/video/1111111
-https://www.tiktok.com/@user2/video/2222222
-https://vt.tiktok.com/ABC123/"></textarea>
-                    <div class="hint">Tối đa 10 video mỗi lần để tránh bị chặn.</div>
-                </div>
-                
-                <div class="api-selector">
-                    <div class="api-option">
-                        <label for="apiProvider">Chọn dịch vụ API:</label>
-                        <select id="apiProvider">
-                            <option value="tikwm">TikWM (nhanh, ổn định)</option>
-                            <option value="tikmate">TikMate (dự phòng)</option>
-                            <option value="snaptik">SnapTik (chất lượng cao)</option>
-                        </select>
-                    </div>
-                    <div class="api-option">
-                        <label for="proxyProvider">Chọn Proxy CORS:</label>
-                        <select id="proxyProvider">
-                            <option value="allorigins">AllOrigins (mặc định)</option>
-                            <option value="corsproxy">CORS-Proxy (dự phòng)</option>
-                            <option value="thingproxy">ThingProxy (dự phòng 2)</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="btn-group">
-                    <button class="btn" onclick="downloadSingle()" id="singleBtn">
-                        <span>⬇️ Tải Video Này</span>
-                    </button>
-                    <button class="btn" onclick="downloadBatch()" id="batchBtn">
-                        <span>🚀 Tải Tất Cả Video</span>
-                    </button>
-                    <button class="btn btn-secondary" onclick="clearAll()">
-                        <span>🗑️ Xóa Tất Cả</span>
-                    </button>
-                </div>
-            </div>
-            
-            <div class="loading" id="loading">
-                <div class="spinner"></div>
-                <p>Đang xử lý video... Vui lòng chờ</p>
-                <div id="progress" style="margin-top: 10px;"></div>
-            </div>
-            
-            <div id="results">
-                <h2>📋 Kết Quả Tải Xuống</h2>
-                <div id="resultContainer"></div>
-            </div>
-        </main>
-        
-        <footer>
-            <p>Công cụ web tĩnh 100% | Sử dụng API công khai miễn phí | Không lưu trữ dữ liệu</p>
-            <p>Video được tải về không chứa watermark TikTok | Tổng số video đã xử lý: <span id="totalCount">0</span></p>
-        </footer>
+            <div id="urlList" class="url-list"></div>
+
+            <button id="downloadAllBtn" onclick="downloadAll()" style="width: 100%; margin-top: 15px;" disabled>
+                Tải tất cả video (<span id="urlCount">0</span>)
+            </button>
+        </div>
+
+        <div id="progressContainer" class="progress-container" style="display: none;"></div>
+        <div id="results" class="results"></div>
     </div>
 
     <script>
-        // Cấu hình API và Proxy
-        const API_CONFIG = {
-            tikwm: {
-                name: "TikWM",
-                url: "https://www.tikwm.com/api/",
-                method: "POST",
-                getVideoUrl: (data) => data.data.play || data.data.wmplay
-            },
-            tikmate: {
-                name: "TikMate",
-                url: "https://api.tikmate.app/api/lookup",
-                method: "POST",
-                getVideoUrl: (data) => `https://tikmate.app/download/${data.token}/${data.id}.mp4`
-            },
-            snaptik: {
-                name: "SnapTik",
-                url: "https://snaptik.app/action.php",
-                method: "POST",
-                getVideoUrl: (data) => data.download_url || data.url
-            }
-        };
+        let urlList = [];
 
-        const PROXY_CONFIG = {
-            allorigins: "https://api.allorigins.win/get?url=",
-            corsproxy: "https://corsproxy.io/?",
-            thingproxy: "https://thingproxy.freeboard.io/fetch/"
-        };
+        function addUrl() {
+            const input = document.getElementById('urlInput');
+            const url = input.value.trim();
 
-        // Biến toàn cục
-        let totalProcessed = 0;
-        const MAX_CONCURRENT = 3; // Số video xử lý đồng thời tối đa
-
-        // Hàm lấy cấu hình hiện tại
-        function getCurrentConfig() {
-            const apiKey = document.getElementById('apiProvider').value;
-            const proxyKey = document.getElementById('proxyProvider').value;
-            return {
-                api: API_CONFIG[apiKey],
-                proxy: PROXY_CONFIG[proxyKey]
-            };
-        }
-
-        // Hàm xử lý một URL TikTok
-        async function processTikTokUrl(tiktokUrl, index = 1, total = 1) {
-            const config = getCurrentConfig();
-            const api = config.api;
-            const proxy = config.proxy;
-            
-            // Chuẩn bị dữ liệu cho API
-            const formData = new URLSearchParams();
-            formData.append('url', tiktokUrl);
-            
-            // Xây dựng URL proxy
-            let proxyUrl;
-            if (api.method === 'GET') {
-                proxyUrl = `${proxy}${encodeURIComponent(api.url + '?' + formData.toString())}`;
-            } else {
-                proxyUrl = proxy + encodeURIComponent(api.url);
-            }
-            
-            try {
-                // Gọi API thông qua proxy
-                const response = await fetch(proxyUrl, {
-                    method: api.method,
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: api.method === 'POST' ? formData : null
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`Lỗi HTTP: ${response.status}`);
-                }
-                
-                const data = await response.json();
-                
-                // Trích xuất video URL từ dữ liệu API
-                let videoUrl;
-                if (proxy.includes('allorigins')) {
-                    // AllOrigins trả về dữ liệu trong trường 'contents'
-                    const apiData = JSON.parse(data.contents);
-                    videoUrl = api.getVideoUrl(apiData);
-                } else {
-                    videoUrl = api.getVideoUrl(data);
-                }
-                
-                // Xử lý URL video (nếu là đường dẫn tương đối)
-                if (videoUrl && !videoUrl.startsWith('http')) {
-                    if (api.url.includes('tikwm')) {
-                        videoUrl = 'https://www.tikwm.com' + videoUrl;
-                    }
-                }
-                
-                return {
-                    success: true,
-                    url: tiktokUrl,
-                    downloadUrl: videoUrl,
-                    title: `Video TikTok #${index}`,
-                    apiUsed: api.name
-                };
-                
-            } catch (error) {
-                console.error(`Lỗi xử lý ${tiktokUrl}:`, error);
-                return {
-                    success: false,
-                    url: tiktokUrl,
-                    error: error.message,
-                    apiUsed: api.name
-                };
-            }
-        }
-
-        // Hàm tải một video
-        async function downloadSingle() {
-            const urlInput = document.getElementById('singleUrl').value.trim();
-            if (!urlInput) {
-                alert('Vui lòng nhập liên kết TikTok');
+            if (!url) {
+                alert('Vui lòng nhập link TikTok!');
                 return;
             }
-            
-            const btn = document.getElementById('singleBtn');
-            const loading = document.getElementById('loading');
-            const results = document.getElementById('results');
-            
-            btn.disabled = true;
-            loading.style.display = 'block';
-            results.style.display = 'none';
-            
-            const result = await processTikTokUrl(urlInput, 1, 1);
-            
-            loading.style.display = 'none';
-            btn.disabled = false;
-            results.style.display = 'block';
-            
-            displayResult(result, 1);
-            updateTotalCount();
+
+            if (!url.includes('tiktok.com')) {
+                alert('Link không hợp lệ! Vui lòng nhập link TikTok.');
+                return;
+            }
+
+            if (urlList.includes(url)) {
+                alert('Link này đã được thêm vào danh sách!');
+                return;
+            }
+
+            urlList.push(url);
+            input.value = '';
+            updateUrlList();
         }
 
-        // Hàm tải nhiều video
-        async function downloadBatch() {
-            const batchTextarea = document.getElementById('batchUrls').value.trim();
-            if (!batchTextarea) {
-                alert('Vui lòng nhập ít nhất một liên kết TikTok');
-                return;
-            }
-            
-            const urls = batchTextarea.split('\n')
-                .map(url => url.trim())
-                .filter(url => url.length > 0 && url.includes('tiktok'));
-            
-            if (urls.length === 0) {
-                alert('Không tìm thấy liên kết TikTok hợp lệ');
-                return;
-            }
-            
-            if (urls.length > 10) {
-                alert('Chỉ hỗ trợ tối đa 10 video mỗi lần để tránh bị chặn');
-                return;
-            }
-            
-            const btn = document.getElementById('batchBtn');
-            const loading = document.getElementById('loading');
-            const progress = document.getElementById('progress');
-            const results = document.getElementById('results');
-            
-            btn.disabled = true;
-            loading.style.display = 'block';
-            results.style.display = 'none';
-            results.style.display = 'block';
-            
-            // Xử lý từng video với giới hạn đồng thời
-            const resultContainer = document.getElementById('resultContainer');
-            resultContainer.innerHTML = '';
-            
-            for (let i = 0; i < urls.length; i += MAX_CONCURRENT) {
-                const batch = urls.slice(i, i + MAX_CONCURRENT);
-                const promises = batch.map((url, index) => 
-                    processTikTokUrl(url, i + index + 1, urls.length)
-                );
-                
-                const batchResults = await Promise.all(promises);
-                
-                batchResults.forEach((result, idx) => {
-                    displayResult(result, i + idx + 1);
-                });
-                
-                progress.innerHTML = `Đã xử lý: ${Math.min(i + MAX_CONCURRENT, urls.length)}/${urls.length} video`;
-                await new Promise(resolve => setTimeout(resolve, 1000)); // Đợi 1 giây giữa các batch
-            }
-            
-            loading.style.display = 'none';
-            btn.disabled = false;
-            updateTotalCount();
-            
-            alert(`Đã hoàn thành xử lý ${urls.length} video!`);
+        function removeUrl(index) {
+            urlList.splice(index, 1);
+            updateUrlList();
         }
 
-        // Hiển thị kết quả
-        function displayResult(result, index) {
-            const container = document.getElementById('resultContainer');
-            
-            const card = document.createElement('div');
-            card.className = 'video-card';
-            card.id = `video-${index}`;
-            
-            let statusClass, statusText, actionButtons = '';
-            
-            if (result.success) {
-                statusClass = 'status-success';
-                statusText = '✓ Thành công';
-                actionButtons = `
-                    <a href="${result.downloadUrl}" class="btn" target="_blank" download style="text-decoration: none;">
-                        ⬇️ Tải Ngay
-                    </a>
-                    <a href="${result.downloadUrl}" class="btn btn-secondary" target="_blank" style="text-decoration: none;">
-                        👁️ Xem Trước
-                    </a>
-                `;
-            } else {
-                statusClass = 'status-error';
-                statusText = `✗ Lỗi: ${result.error}`;
-                actionButtons = `
-                    <button class="btn btn-secondary" onclick="retryVideo(${index})">
-                        🔄 Thử Lại
-                    </button>
-                `;
+        function updateUrlList() {
+            const container = document.getElementById('urlList');
+            const countSpan = document.getElementById('urlCount');
+            const downloadBtn = document.getElementById('downloadAllBtn');
+
+            countSpan.textContent = urlList.length;
+            downloadBtn.disabled = urlList.length === 0;
+
+            if (urlList.length === 0) {
+                container.innerHTML = '';
+                return;
             }
-            
-            card.innerHTML = `
-                <div class="video-info">
-                    <div class="video-title">Video #${index} (${result.apiUsed})</div>
-                    <div class="video-url">${result.url.substring(0, 60)}${result.url.length > 60 ? '...' : ''}</div>
-                    <div class="video-meta">
-                        <span>API: ${result.apiUsed}</span>
+
+            container.innerHTML = urlList.map((url, index) => `
+                <div class="url-item">
+                    <span class="url-text">${url}</span>
+                    <button class="remove-btn" onclick="removeUrl(${index})">Xóa</button>
+                </div>
+            `).join('');
+        }
+
+        async function downloadAll() {
+            if (urlList.length === 0) return;
+
+            const resultsDiv = document.getElementById('results');
+            const progressContainer = document.getElementById('progressContainer');
+            const downloadBtn = document.getElementById('downloadAllBtn');
+
+            resultsDiv.innerHTML = '';
+            progressContainer.style.display = 'block';
+            progressContainer.innerHTML = '';
+            downloadBtn.disabled = true;
+
+            for (let i = 0; i < urlList.length; i++) {
+                const url = urlList[i];
+                const progressId = `progress-${i}`;
+                
+                progressContainer.innerHTML += `
+                    <div class="progress-item" id="${progressId}">
+                        <div>Video ${i + 1}/${urlList.length}</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <div class="status loading">Đang xử lý...</div>
                     </div>
-                </div>
-                <div class="video-actions">
-                    <span class="status ${statusClass}">${statusText}</span>
-                    ${actionButtons}
-                </div>
-            `;
-            
-            container.appendChild(card);
+                `;
+
+                await downloadVideo(url, i, progressId);
+            }
+
+            downloadBtn.disabled = false;
         }
 
-        // Thử lại video bị lỗi
-        async function retryVideo(index) {
-            const card = document.getElementById(`video-${index}`);
-            if (!card) return;
-            
-            const url = card.querySelector('.video-url').textContent;
-            const statusSpan = card.querySelector('.status');
-            const actionsDiv = card.querySelector('.video-actions');
-            
-            statusSpan.className = 'status status-processing';
-            statusSpan.textContent = '⏳ Đang thử lại...';
-            
-            const result = await processTikTokUrl(url, index, 1);
-            
-            if (result.success) {
-                statusSpan.className = 'status status-success';
-                statusSpan.textContent = '✓ Thành công';
-                actionsDiv.innerHTML = `
-                    <span class="status status-success">✓ Thành công</span>
-                    <a href="${result.downloadUrl}" class="btn" target="_blank" download style="text-decoration: none;">
-                        ⬇️ Tải Ngay
-                    </a>
-                    <a href="${result.downloadUrl}" class="btn btn-secondary" target="_blank" style="text-decoration: none;">
-                        👁️ Xem Trước
-                    </a>
+        async function downloadVideo(url, index, progressId) {
+            const progressItem = document.getElementById(progressId);
+            const progressFill = progressItem.querySelector('.progress-fill');
+            const statusDiv = progressItem.querySelector('.status');
+
+            try {
+                progressFill.style.width = '30%';
+                statusDiv.textContent = 'Đang lấy thông tin video...';
+
+                // API để tải video TikTok không watermark
+                const apiUrl = `https://www.tikwm.com/api/?url=${encodeURIComponent(url)}`;
+                
+                progressFill.style.width = '60%';
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (data.code !== 0 || !data.data) {
+                    throw new Error('Không thể lấy thông tin video');
+                }
+
+                progressFill.style.width = '100%';
+                statusDiv.className = 'status success';
+                statusDiv.textContent = 'Hoàn thành!';
+
+                displayVideoResult(data.data, index);
+
+            } catch (error) {
+                console.error('Error:', error);
+                progressFill.style.width = '100%';
+                statusDiv.className = 'status error';
+                statusDiv.textContent = 'Lỗi: ' + error.message;
+
+                const resultsDiv = document.getElementById('results');
+                resultsDiv.innerHTML += `
+                    <div class="video-card">
+                        <div class="status error">
+                            ❌ Không thể tải video ${index + 1}: ${error.message}
+                        </div>
+                    </div>
                 `;
-            } else {
-                statusSpan.className = 'status status-error';
-                statusSpan.textContent = `✗ Lỗi: ${result.error}`;
-                actionsDiv.innerHTML = `
-                    <span class="status status-error">✗ Lỗi: ${result.error}</span>
-                    <button class="btn btn-secondary" onclick="retryVideo(${index})">
-                        🔄 Thử Lại
+            }
+        }
+
+        function displayVideoResult(videoData, index) {
+            const resultsDiv = document.getElementById('results');
+            
+            const videoCard = document.createElement('div');
+            videoCard.className = 'video-card';
+            videoCard.innerHTML = `
+                <div class="video-info">
+                    <h3>Video ${index + 1}: ${videoData.title || 'Không có tiêu đề'}</h3>
+                    <div class="video-meta">👤 Tác giả: ${videoData.author?.nickname || 'N/A'} (@${videoData.author?.unique_id || 'N/A'})</div>
+                    <div class="video-meta">❤️ Lượt thích: ${formatNumber(videoData.digg_count || 0)}</div>
+                    <div class="video-meta">💬 Bình luận: ${formatNumber(videoData.comment_count || 0)}</div>
+                    <div class="video-meta">🔄 Chia sẻ: ${formatNumber(videoData.share_count || 0)}</div>
+                    <div class="video-meta">▶️ Lượt xem: ${formatNumber(videoData.play_count || 0)}</div>
+                    <div class="video-meta">⏱️ Thời lượng: ${videoData.duration || 0}s</div>
+                </div>
+                ${videoData.cover ? `<img src="${videoData.cover}" class="video-preview" alt="Video preview">` : ''}
+                <button class="download-btn" onclick="window.open('${videoData.play}', '_blank')">
+                    ⬇️ Tải video (Không Watermark)
+                </button>
+                ${videoData.music ? `
+                    <button class="download-btn" onclick="window.open('${videoData.music}', '_blank')">
+                        🎵 Tải nhạc nền
                     </button>
-                `;
+                ` : ''}
+            `;
+
+            resultsDiv.appendChild(videoCard);
+        }
+
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
             }
-            
-            updateTotalCount();
+            return num.toString();
         }
 
-        // Cập nhật tổng số video đã xử lý
-        function updateTotalCount() {
-            const successCards = document.querySelectorAll('.status-success').length;
-            document.getElementById('totalCount').textContent = successCards;
-            totalProcessed = successCards;
-        }
-
-        // Xóa tất cả
-        function clearAll() {
-            document.getElementById('singleUrl').value = '';
-            document.getElementById('batchUrls').value = '';
-            document.getElementById('resultContainer').innerHTML = '';
-            document.getElementById('results').style.display = 'none';
-            document.getElementById('totalCount').textContent = '0';
-        }
-
-        // Tự động xóa khoảng trắng khi dán liên kết
-        document.getElementById('singleUrl').addEventListener('paste', function(e) {
-            setTimeout(() => {
-                this.value = this.value.trim();
-            }, 100);
-        });
-
-        // Thêm liên kết mẫu khi click vào placeholder
-        document.getElementById('singleUrl').addEventListener('click', function() {
-            if (!this.value) {
-                this.value = 'https://www.tiktok.com/@tiktok/video/7100000000000000000';
+        // Cho phép nhấn Enter để thêm URL
+        document.getElementById('urlInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addUrl();
             }
         });
-
-        // Hiển thị trang kết quả ngay khi bắt đầu
-        document.getElementById('results').style.display = 'block';
     </script>
 </body>
 </html>
