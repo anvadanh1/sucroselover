@@ -1,154 +1,134 @@
-// LƯU Ý QUAN TRỌNG: Thay YOUR_RAPIDAPI_KEY bằng khóa API thực của bạn từ RapidAPI
-const RAPIDAPI_KEY = 'YOUR_RAPIDAPI_KEY'; // 👈 THAY ĐỔI DÒNG NÀY
+document.addEventListener('DOMContentLoaded', function() {
+    const tiktokUrlInput = document.getElementById('tiktokUrl');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const resultArea = document.getElementById('resultArea');
+    const videoPreview = document.getElementById('videoPreview');
+    const directDownloadLink = document.getElementById('directDownloadLink');
+    const resetBtn = document.getElementById('resetBtn');
+    const loading = document.getElementById('loading');
+    const error = document.getElementById('error');
+    const errorText = document.getElementById('errorText');
 
-// Các phần tử giao diện
-const urlInput = document.getElementById('urlInput');
-const downloadBtn = document.getElementById('downloadBtn');
-const resultSection = document.getElementById('resultSection');
-const loadingEl = document.getElementById('loading');
-const successEl = document.getElementById('success');
-const errorEl = document.getElementById('error');
-const errorMessage = document.getElementById('errorMessage');
-const videoPreview = document.getElementById('videoPreview');
-const videoInfo = document.getElementById('videoInfo');
-const downloadLink = document.getElementById('downloadLink');
+    // Sử dụng một CORS Proxy miễn phí và công khai (có thể cần thay đổi nếu bị lỗi)
+    const CORS_PROXY = "https://api.allorigins.win/raw?url=";
 
-// Hàm kiểm tra URL TikTok hợp lệ
-function isValidTikTokUrl(url) {
-    const patterns = [
-        /https?:\/\/(vm|vt)\.tiktok\.com\/\S+/,
-        /https?:\/\/(www\.)?tiktok\.com\/@[\w.]+\/video\/\d+/,
-        /https?:\/\/tiktok\.com\/@[\w.]+\/video\/\d+/,
-    ];
-    return patterns.some(pattern => pattern.test(url));
-}
+    // API công khai miễn phí - SSSTikTok
+    const DOWNLOADER_API_URL = "https://ssstik.io/abc?url=dl";
 
-// Hàm xử lý khi nhấn nút "Tải Video"
-downloadBtn.addEventListener('click', processVideo);
-urlInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') processVideo();
+    downloadBtn.addEventListener('click', async function() {
+        const url = tiktokUrlInput.value.trim();
+
+        if (!url || !url.includes('tiktok.com')) {
+            showError('Vui lòng dán một đường link TikTok hợp lệ.');
+            return;
+        }
+
+        // Hiển thị trạng thái loading, ẩn kết quả cũ và lỗi
+        loading.style.display = 'block';
+        resultArea.style.display = 'none';
+        error.style.display = 'none';
+
+        try {
+            // Bước 1: Gửi yêu cầu đến SSSTikTok để lấy trang HTML chứa thông tin video
+            const formData = new FormData();
+            formData.append('id', url); // SSSTikTok chờ tham số 'id' là link TikTok
+
+            const response = await fetch(CORS_PROXY + encodeURIComponent(DOWNLOADER_API_URL), {
+                method: 'POST',
+                body: formData,
+                // Gửi header giả lập trình duyệt
+                headers: {
+                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                    'Accept-Language': 'en-US,en;q=0.5',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Origin': 'https://ssstik.io',
+                    'DNT': '1',
+                    'Connection': 'keep-alive',
+                    'Upgrade-Insecure-Requests': '1',
+                    'Sec-Fetch-Dest': 'document',
+                    'Sec-Fetch-Mode': 'navigate',
+                    'Sec-Fetch-Site': 'same-origin',
+                    'Pragma': 'no-cache',
+                    'Cache-Control': 'no-cache',
+                }
+            });
+
+            const htmlString = await response.text();
+
+            // Bước 2: Phân tích HTML để tìm link tải video không watermark
+            // Link thường nằm trong thẻ <a> với thuộc tính href chứa ".mp4"
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlString, 'text/html');
+
+            // Tìm tất cả các thẻ <a> và lọc lấy link mp4
+            const allLinks = doc.querySelectorAll('a');
+            let videoDownloadUrl = null;
+
+            for (let link of allLinks) {
+                const href = link.getAttribute('href');
+                if (href && href.includes('.mp4') && !href.includes('watermark')) {
+                    videoDownloadUrl = href;
+                    break; // Lấy link đầu tiên tìm thấy
+                }
+            }
+
+            // Nếu không tìm thấy theo cách trên, thử tìm trong các thẻ <script> hoặc <source>
+            if (!videoDownloadUrl) {
+                const sourceTags = doc.querySelectorAll('source');
+                for (let source of sourceTags) {
+                    const src = source.getAttribute('src');
+                    if (src && src.includes('.mp4')) {
+                        videoDownloadUrl = src;
+                        break;
+                    }
+                }
+            }
+
+            if (!videoDownloadUrl) {
+                // Cấu trúc HTML có thể đã thay đổi -> Cần cập nhật logic phân tích
+                throw new Error('Không thể tìm thấy link video. Công cụ miễn phí có thể đã thay đổi. Vui lòng thử lại hoặc dùng công cụ khác (SnapTik/TikMate).');
+            }
+
+            // Đảm bảo link là URL đầy đủ
+            if (!videoDownloadUrl.startsWith('http')) {
+                videoDownloadUrl = 'https://ssstik.io' + videoDownloadUrl;
+            }
+
+            // Bước 3: Hiển thị kết quả
+            videoPreview.src = videoDownloadUrl;
+            directDownloadLink.href = videoDownloadUrl;
+
+            // Ẩn loading, hiển thị kết quả
+            loading.style.display = 'none';
+            resultArea.style.display = 'block';
+
+        } catch (err) {
+            console.error('Lỗi khi xử lý video:', err);
+            loading.style.display = 'none';
+            showError(`Đã xảy ra lỗi: ${err.message}. Vui lòng thử lại với một video khác hoặc kiểm tra kết nối mạng.`);
+        }
+    });
+
+    // Nút "Xử lý Video Khác"
+    resetBtn.addEventListener('click', function() {
+        tiktokUrlInput.value = '';
+        videoPreview.src = '';
+        directDownloadLink.href = '#';
+        resultArea.style.display = 'none';
+        error.style.display = 'none';
+        tiktokUrlInput.focus();
+    });
+
+    // Hàm hiển thị thông báo lỗi
+    function showError(message) {
+        errorText.textContent = message;
+        error.style.display = 'block';
+    }
+
+    // Cho phép nhấn Enter để gửi
+    tiktokUrlInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            downloadBtn.click();
+        }
+    });
 });
-
-async function processVideo() {
-    const url = urlInput.value.trim();
-
-    // 1. Kiểm tra URL
-    if (!url) {
-        alert('Vui lòng dán link video TikTok vào ô trống.');
-        urlInput.focus();
-        return;
-    }
-    if (!isValidTikTokUrl(url)) {
-        alert('Link không hợp lệ. Vui lòng dán link TikTok công khai (dạng vm.tiktok.com/... hoặc tiktok.com/@user/video/...).');
-        return;
-    }
-
-    // 2. Hiển thị trạng thái "Đang xử lý"
-    resetUI();
-    resultSection.classList.remove('hidden');
-    loadingEl.classList.remove('hidden');
-
-    try {
-        // 3. Gọi API để lấy thông tin video
-        const videoData = await fetchVideoData(url);
-
-        // 4. Hiển thị kết quả thành công
-        displayVideo(videoData);
-
-    } catch (err) {
-        // 5. Xử lý lỗi
-        showError('Không thể tải video. Lỗi: ' + err.message + '. Vui lòng kiểm tra lại link hoặc thử lại sau.');
-        console.error('Lỗi chi tiết:', err);
-    }
-}
-
-// Hàm gọi API RapidAPI
-async function fetchVideoData(tiktokUrl) {
-    const encodedUrl = encodeURIComponent(tiktokUrl);
-    const apiUrl = `https://tiktok-video-downloader3.p.rapidapi.com/?url=${encodedUrl}`;
-
-    const options = {
-        method: 'GET',
-        headers: {
-            'X-RapidAPI-Key': RAPIDAPI_KEY, // Sử dụng khóa API từ biến đã khai báo
-            'X-RapidAPI-Host': 'tiktok-video-downloader3.p.rapidapi.com'
-        }
-    };
-
-    const response = await fetch(apiUrl, options);
-
-    if (!response.ok) {
-        throw new Error(`API lỗi với mã: ${response.status}`);
-    }
-
-    const data = await response.json();
-    console.log('Phản hồi từ API:', data); // Kiểm tra trong Console
-
-    // API này trả về dữ liệu trong trường "data"
-    if (data && data.data) {
-        // Tìm URL video không watermark (thường là playAddr)
-        const videoItem = data.data;
-        const videoUrl = videoItem.play || videoItem.download || videoItem.videoUrl;
-
-        if (videoUrl) {
-            return {
-                url: videoUrl,
-                author: videoItem.author?.nickname || 'Không rõ',
-                description: videoItem.description || 'Không có mô tả',
-                duration: videoItem.duration ? `${Math.round(videoItem.duration)} giây` : 'Không rõ'
-            };
-        } else {
-            throw new Error('Không tìm thấy link video trong phản hồi của API.');
-        }
-    } else {
-        throw new Error('Dữ liệu từ API không như mong đợi.');
-    }
-}
-
-// Hàm hiển thị video và thông tin
-function displayVideo(data) {
-    loadingEl.classList.add('hidden');
-
-    // Hiển thị video để xem trước
-    videoPreview.innerHTML = `
-        <video controls>
-            <source src="${data.url}" type="video/mp4">
-            Trình duyệt của bạn không hỗ trợ tag video.
-        </video>
-    `;
-
-    // Hiển thị thông tin
-    videoInfo.innerHTML = `
-        <p><strong>Tác giả:</strong> ${data.author}</p>
-        <p><strong>Thời lượng:</strong> ${data.duration}</p>
-        <p><strong>Mô tả:</strong> ${data.description.length > 100 ? data.description.substring(0, 100) + '...' : data.description}</p>
-    `;
-
-    // Thiết lập link tải
-    downloadLink.href = data.url;
-    downloadLink.setAttribute('download', `tiktok_${Date.now()}.mp4`);
-
-    successEl.classList.remove('hidden');
-}
-
-// Hàm hiển thị thông báo lỗi
-function showError(message) {
-    loadingEl.classList.add('hidden');
-    errorMessage.textContent = message;
-    errorEl.classList.remove('hidden');
-}
-
-// Hàm đặt lại giao diện
-function resetUI() {
-    successEl.classList.add('hidden');
-    errorEl.classList.add('hidden');
-    videoPreview.innerHTML = '';
-    videoInfo.innerHTML = '';
-}
-
-// Hàm thử lại
-window.retryProcess = function() {
-    errorEl.classList.add('hidden');
-    urlInput.focus();
-    urlInput.select();
-};
