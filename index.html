@@ -669,4 +669,186 @@
                         <div class="progress-bar">
                             <div class="progress-fill" style="width: 0%"></div>
                         </div>
-                        <div class="statu
+                        <div class="status loading">Đang xử lý...</div>
+                    </div>
+                `;
+
+                await downloadVideo(url, i, progressId);
+            }
+
+            downloadBtn.disabled = false;
+            
+            if (downloadedVideos.length > 0) {
+                autoDownloadSection.style.display = 'block';
+                autoDownloadSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        async function downloadVideo(url, index, progressId) {
+            const progressItem = document.getElementById(progressId);
+            const progressFill = progressItem.querySelector('.progress-fill');
+            const statusDiv = progressItem.querySelector('.status');
+
+            try {
+                progressFill.style.width = '30%';
+                statusDiv.textContent = 'Đang lấy thông tin...';
+
+                const apiUrl = `https://www.tikwm.com/api/?url=${encodeURIComponent(url)}&hd=1`;
+                
+                progressFill.style.width = '60%';
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (data.code !== 0 || !data.data) {
+                    throw new Error('Không thể lấy thông tin video');
+                }
+
+                progressFill.style.width = '100%';
+                statusDiv.className = 'status success';
+                statusDiv.textContent = 'Hoàn thành!';
+
+                downloadedVideos.push({
+                    data: data.data,
+                    index: index
+                });
+
+                displayVideoResult(data.data, index);
+
+            } catch (error) {
+                console.error('Error:', error);
+                progressFill.style.width = '100%';
+                statusDiv.className = 'status error';
+                statusDiv.textContent = 'Lỗi: ' + error.message;
+
+                const resultsDiv = document.getElementById('results');
+                resultsDiv.innerHTML += `
+                    <div class="video-card">
+                        <div class="status error">
+                            ❌ Không thể tải video ${index + 1}: ${error.message}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        async function downloadFileDirectly(url, filename) {
+            try {
+                const response = await fetch(url);
+                const blob = await response.blob();
+                const blobUrl = window.URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(blobUrl);
+                
+                return true;
+            } catch (error) {
+                console.error('Download error:', error);
+                window.open(url, '_blank');
+                return false;
+            }
+        }
+
+        async function autoDownloadAll() {
+            if (downloadedVideos.length === 0) {
+                alert('Không có video nào để tải!');
+                return;
+            }
+
+            const button = event.target;
+            button.disabled = true;
+            button.textContent = '⏳ Đang tải...';
+
+            for (let i = 0; i < downloadedVideos.length; i++) {
+                const videoInfo = downloadedVideos[i];
+                const videoData = videoInfo.data;
+                
+                const videoUrl = videoData.hdplay || videoData.play;
+                const filename = `tiktok_${videoData.author?.unique_id || 'video'}_${videoData.id || i}.mp4`;
+                
+                if (i > 0) {
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                }
+                
+                await downloadFileDirectly(videoUrl, filename);
+            }
+
+            button.disabled = false;
+            button.textContent = '✅ Đã tải xong!';
+            
+            setTimeout(() => {
+                button.textContent = '⬇️ Tự động tải xuống tất cả (HD)';
+            }, 3000);
+        }
+
+        function displayVideoResult(videoData, index) {
+            const resultsDiv = document.getElementById('results');
+            
+            const videoUrl = videoData.hdplay || videoData.play;
+            const quality = videoData.hdplay ? 'HD' : 'SD';
+            
+            const videoCard = document.createElement('div');
+            videoCard.className = 'video-card';
+            videoCard.innerHTML = `
+                <div class="video-info">
+                    <h3>Video ${index + 1}: ${videoData.title || 'Không có tiêu đề'}</h3>
+                    <div class="video-meta">👤 @${videoData.author?.unique_id || 'N/A'}</div>
+                    <div class="video-meta">❤️ ${formatNumber(videoData.digg_count || 0)} | 💬 ${formatNumber(videoData.comment_count || 0)}</div>
+                    <div class="video-meta">▶️ ${formatNumber(videoData.play_count || 0)} lượt xem | ⏱️ ${videoData.duration || 0}s</div>
+                    <div class="video-meta" style="color: #667eea; font-weight: bold;">🎬 Chất lượng: ${quality}</div>
+                </div>
+                <video 
+                    src="${videoUrl}" 
+                    class="video-preview" 
+                    controls 
+                    muted 
+                    preload="metadata">
+                </video>
+                <div style="font-size: 12px; color: #666; margin: 5px 0;">
+                    🔇 Video tự động tắt tiếng
+                </div>
+                <button class="download-btn" onclick="downloadFileDirectly('${videoUrl}', 'tiktok_${videoData.author?.unique_id || 'video'}_${videoData.id || index}.mp4')">
+                    ⬇️ Tải video ${quality}
+                </button>
+                ${videoData.music ? `
+                    <button class="download-btn" onclick="downloadFileDirectly('${videoData.music}', 'tiktok_music_${index}.mp3')">
+                        🎵 Tải nhạc nền
+                    </button>
+                ` : ''}
+            `;
+
+            resultsDiv.appendChild(videoCard);
+        }
+
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+
+        // Enter để search
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchVideos();
+            }
+        });
+
+        // Enter để thêm URL
+        document.getElementById('urlInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addUrl();
+            }
+        });
+
+        // Khởi tạo
+        updateDownloadList();
+    </script>
+</body>
+</html>
