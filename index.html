@@ -15,58 +15,133 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 10px;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
-            padding: 40px;
+            padding: 20px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                padding: 40px;
+            }
         }
 
         h1 {
             text-align: center;
             color: #333;
             margin-bottom: 10px;
-            font-size: 2.5em;
+            font-size: 1.8em;
         }
 
-        h2 {
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 1.5em;
+        @media (min-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
         }
 
         .subtitle {
             text-align: center;
             color: #666;
-            margin-bottom: 30px;
-            font-size: 1.1em;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+
+        @media (min-width: 768px) {
+            .subtitle {
+                font-size: 1.1em;
+                margin-bottom: 30px;
+            }
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px 20px;
+            background: #e0e0e0;
+            color: #666;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        @media (min-width: 768px) {
+            .tab-btn {
+                font-size: 16px;
+                padding: 15px 30px;
+            }
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         .input-section {
             background: #f8f9fa;
-            padding: 25px;
+            padding: 15px;
             border-radius: 15px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .input-section {
+                padding: 25px;
+                margin-bottom: 30px;
+            }
         }
 
         .input-group {
             display: flex;
+            flex-direction: column;
             gap: 10px;
             margin-bottom: 15px;
         }
 
+        @media (min-width: 768px) {
+            .input-group {
+                flex-direction: row;
+            }
+        }
+
         input[type="text"] {
             flex: 1;
-            padding: 15px;
+            padding: 12px;
             border: 2px solid #ddd;
             border-radius: 10px;
-            font-size: 16px;
+            font-size: 14px;
             transition: border-color 0.3s;
+        }
+
+        @media (min-width: 768px) {
+            input[type="text"] {
+                padding: 15px;
+                font-size: 16px;
+            }
         }
 
         input[type="text"]:focus {
@@ -75,15 +150,22 @@
         }
 
         button {
-            padding: 15px 30px;
+            padding: 12px 20px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
             border-radius: 10px;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        @media (min-width: 768px) {
+            button {
+                padding: 15px 30px;
+                font-size: 16px;
+            }
         }
 
         button:hover {
@@ -119,64 +201,164 @@
         .url-text {
             flex: 1;
             color: #333;
-            font-size: 14px;
+            font-size: 12px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
 
+        @media (min-width: 768px) {
+            .url-text {
+                font-size: 14px;
+            }
+        }
+
         .remove-btn {
             padding: 5px 15px;
             background: #ff4757;
-            font-size: 14px;
+            font-size: 12px;
         }
 
-        .info-box {
-            background: #e3f2fd;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border-left: 4px solid #2196f3;
+        @media (min-width: 768px) {
+            .remove-btn {
+                font-size: 14px;
+            }
         }
 
-        .info-box p {
-            color: #1976d2;
+        .search-results {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        @media (min-width: 768px) {
+            .search-results {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 15px;
+            }
+        }
+
+        .search-item {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .search-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .search-item img {
+            width: 100%;
+            aspect-ratio: 9/16;
+            object-fit: cover;
+        }
+
+        .search-item-info {
+            padding: 10px;
+        }
+
+        .search-item-title {
+            font-size: 12px;
+            font-weight: 600;
             margin-bottom: 5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
         }
 
-        .results {
-            margin-top: 30px;
+        @media (min-width: 768px) {
+            .search-item-title {
+                font-size: 14px;
+            }
+        }
+
+        .search-item-meta {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 3px;
+        }
+
+        @media (min-width: 768px) {
+            .search-item-meta {
+                font-size: 12px;
+            }
+        }
+
+        .search-item-btn {
+            width: 100%;
+            padding: 8px;
+            margin-top: 8px;
+            font-size: 12px;
+        }
+
+        @media (min-width: 768px) {
+            .search-item-btn {
+                padding: 10px;
+                font-size: 13px;
+            }
+        }
+
+        .search-item-btn.added {
+            background: #4caf50;
         }
 
         .video-card {
             background: #f8f9fa;
             border-radius: 15px;
-            padding: 20px;
+            padding: 15px;
             margin-bottom: 20px;
             border: 1px solid #e0e0e0;
         }
 
-        .video-info {
-            margin-bottom: 15px;
+        @media (min-width: 768px) {
+            .video-card {
+                padding: 20px;
+            }
         }
 
         .video-info h3 {
             color: #333;
             margin-bottom: 10px;
+            font-size: 1em;
+        }
+
+        @media (min-width: 768px) {
+            .video-info h3 {
+                font-size: 1.2em;
+            }
         }
 
         .video-meta {
             color: #666;
-            font-size: 14px;
+            font-size: 12px;
             margin-bottom: 5px;
+        }
+
+        @media (min-width: 768px) {
+            .video-meta {
+                font-size: 14px;
+            }
         }
 
         .video-preview {
             width: 100%;
-            max-width: 500px;
+            max-width: 100%;
             border-radius: 10px;
             margin: 15px 0;
             background: #000;
+        }
+
+        @media (min-width: 768px) {
+            .video-preview {
+                max-width: 500px;
+            }
         }
 
         .download-btn {
@@ -185,12 +367,33 @@
             margin-top: 10px;
         }
 
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         .status {
             padding: 8px 15px;
             border-radius: 5px;
-            font-size: 14px;
+            font-size: 13px;
             margin-top: 10px;
             display: inline-block;
+        }
+
+        @media (min-width: 768px) {
+            .status {
+                font-size: 14px;
+            }
         }
 
         .status.loading {
@@ -206,21 +409,6 @@
         .status.error {
             background: #f8d7da;
             color: #721c24;
-        }
-
-        .loading-spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
 
         .progress-container {
@@ -248,179 +436,118 @@
             background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
             transition: width 0.3s;
         }
-
-        .search-section {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-        }
-
-        .search-results {
-            margin-top: 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 15px;
-        }
-
-        .search-result-item {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer;
-        }
-
-        .search-result-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
-        }
-
-        .search-result-item img {
-            width: 100%;
-            height: 350px;
-            object-fit: cover;
-        }
-
-        .search-result-info {
-            padding: 12px;
-        }
-
-        .search-result-title {
-            font-size: 14px;
-            color: #333;
-            margin-bottom: 8px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            line-height: 1.4;
-        }
-
-        .search-result-meta {
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 4px;
-        }
-
-        .search-result-actions {
-            padding: 10px;
-            border-top: 1px solid #e0e0e0;
-        }
-
-        .add-search-btn {
-            width: 100%;
-            padding: 10px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .add-search-btn:hover {
-            transform: scale(1.05);
-        }
-
-        .add-search-btn.added {
-            background: #4caf50;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🎵 TikTok Downloader</h1>
-        <p class="subtitle">Tải video TikTok không có watermark - Hỗ trợ tải nhiều video cùng lúc</p>
+        <p class="subtitle">Tải video TikTok không có watermark - Hỗ trợ tìm kiếm và tải nhiều video</p>
 
-        <div class="info-box">
-            <p><strong>📝 Hướng dẫn sử dụng:</strong></p>
-            <p><strong>Cách 1: Tìm kiếm video trực tiếp</strong></p>
-            <p>• Nhập từ khóa vào ô tìm kiếm bên dưới</p>
-            <p>• Chọn video từ kết quả để thêm vào danh sách</p>
-            <p><strong>Cách 2: Thêm link thủ công</strong></p>
-            <p>1. Sao chép link video TikTok từ ứng dụng (nhấn "Chia sẻ" → "Sao chép liên kết")</p>
-            <p>2. Dán link vào ô bên dưới và nhấn "Thêm vào danh sách"</p>
-            <p><strong>Sau đó:</strong></p>
-            <p>• Nhấn "Tải tất cả video" để xử lý</p>
-            <p>• Nhấn "🚀 Tự động tải xuống tất cả" để tải hết về máy</p>
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('search')">🔍 Tìm kiếm</button>
+            <button class="tab-btn" onclick="switchTab('link')">📎 Thêm link</button>
         </div>
 
-        <div class="search-section">
-            <h2>🔍 Tìm kiếm video TikTok</h2>
-            <div class="input-group">
-                <input type="text" id="searchInput" placeholder="Nhập từ khóa tìm kiếm (vd: funny cat, dance, cooking...)">
-                <button onclick="searchVideos()">Tìm kiếm</button>
+        <!-- Tab tìm kiếm -->
+        <div id="searchTab" class="tab-content active">
+            <div class="input-section">
+                <div class="input-group">
+                    <input type="text" id="searchInput" placeholder="Nhập từ khóa tìm kiếm... (vd: funny cat, dance)">
+                    <button onclick="searchVideos()">🔍 Tìm kiếm</button>
+                </div>
+                <div id="searchLoading" style="display: none; text-align: center;">
+                    <div class="loading-spinner"></div>
+                    <p style="color: #666;">Đang tìm kiếm...</p>
+                </div>
+                <div id="searchResults" class="search-results"></div>
             </div>
-            <div id="searchResults" class="search-results"></div>
         </div>
 
-        <div class="input-section">
-            <h2>📝 Hoặc thêm link thủ công</h2>
-            <div class="input-group">
-                <input type="text" id="urlInput" placeholder="Dán link TikTok vào đây (vd: https://www.tiktok.com/@user/video/...)">
-                <button onclick="addUrl()">Thêm vào danh sách</button>
+        <!-- Tab thêm link -->
+        <div id="linkTab" class="tab-content">
+            <div class="input-section">
+                <div class="input-group">
+                    <input type="text" id="urlInput" placeholder="Dán link TikTok vào đây...">
+                    <button onclick="addUrl()">➕ Thêm</button>
+                </div>
+                <div id="urlList" class="url-list"></div>
             </div>
-            
-            <div id="urlList" class="url-list"></div>
+        </div>
 
+        <!-- Danh sách tải -->
+        <div class="input-section" style="background: #e8f5e9;">
+            <h3 style="margin-bottom: 15px; font-size: 1em;">📋 Danh sách tải xuống (<span id="urlCount">0</span> video)</h3>
+            <div id="downloadList" class="url-list"></div>
             <button id="downloadAllBtn" onclick="downloadAll()" style="width: 100%; margin-top: 15px;" disabled>
-                Tải tất cả video (<span id="urlCount">0</span>)
+                🚀 Tải tất cả video
             </button>
         </div>
 
         <div id="progressContainer" class="progress-container" style="display: none;"></div>
         
         <div id="autoDownloadSection" style="display: none; text-align: center; margin: 20px 0;">
-            <button onclick="autoDownloadAll()" style="width: 100%; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); font-size: 18px; padding: 20px;">
-                🚀 Tự động tải xuống tất cả video (HD)
+            <button onclick="autoDownloadAll()" style="width: 100%; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); font-size: 16px; padding: 15px;">
+                ⬇️ Tự động tải xuống tất cả (HD)
             </button>
-            <p style="color: #666; margin-top: 10px; font-size: 14px;">Tất cả video sẽ được tải xuống tự động vào thư mục Downloads</p>
+            <p style="color: #666; margin-top: 10px; font-size: 12px;">Video sẽ được tải về thư mục Downloads</p>
         </div>
 
-        <div id="results" class="results"></div>
+        <div id="results"></div>
     </div>
 
     <script>
         let urlList = [];
         let downloadedVideos = [];
-        let searchResultsData = [];
+
+        function switchTab(tab) {
+            // Ẩn tất cả tabs
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            
+            // Hiển thị tab được chọn
+            if (tab === 'search') {
+                document.getElementById('searchTab').classList.add('active');
+                document.querySelectorAll('.tab-btn')[0].classList.add('active');
+            } else {
+                document.getElementById('linkTab').classList.add('active');
+                document.querySelectorAll('.tab-btn')[1].classList.add('active');
+            }
+        }
 
         async function searchVideos() {
-            const searchInput = document.getElementById('searchInput');
-            const keyword = searchInput.value.trim();
+            const keyword = document.getElementById('searchInput').value.trim();
             const searchResults = document.getElementById('searchResults');
+            const searchLoading = document.getElementById('searchLoading');
 
             if (!keyword) {
                 alert('Vui lòng nhập từ khóa tìm kiếm!');
                 return;
             }
 
-            searchResults.innerHTML = '<div class="loading-spinner"></div><p style="text-align: center; color: #666;">Đang tìm kiếm video...</p>';
+            searchLoading.style.display = 'block';
+            searchResults.innerHTML = '';
 
             try {
-                // Sử dụng TikWM API để tìm kiếm
-                const apiUrl = `https://www.tikwm.com/api/feed/search?keywords=${encodeURIComponent(keyword)}&count=12&cursor=0&hd=1`;
-                
+                const apiUrl = `https://www.tikwm.com/api/feed/search?keywords=${encodeURIComponent(keyword)}&count=20&cursor=0&hd=1`;
                 const response = await fetch(apiUrl);
                 const data = await response.json();
 
-                if (data.code !== 0 || !data.data || !data.data.videos) {
-                    throw new Error('Không tìm thấy kết quả');
+                searchLoading.style.display = 'none';
+
+                if (data.code !== 0 || !data.data || !data.data.videos || data.data.videos.length === 0) {
+                    searchResults.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">Không tìm thấy video nào 😢</p>';
+                    return;
                 }
 
-                searchResultsData = data.data.videos;
-                displaySearchResults(searchResultsData);
+                displaySearchResults(data.data.videos);
 
             } catch (error) {
                 console.error('Search error:', error);
+                searchLoading.style.display = 'none';
                 searchResults.innerHTML = `
-                    <div class="status error" style="text-align: center; padding: 20px;">
-                        ❌ Lỗi tìm kiếm: ${error.message}<br>
-                        <small>Vui lòng thử lại với từ khóa khác</small>
+                    <div style="text-align: center; padding: 20px; color: #f44336;">
+                        ❌ Lỗi: ${error.message}<br>
+                        <small>Vui lòng thử lại</small>
                     </div>
                 `;
             }
@@ -429,29 +556,21 @@
         function displaySearchResults(videos) {
             const searchResults = document.getElementById('searchResults');
             
-            if (!videos || videos.length === 0) {
-                searchResults.innerHTML = '<p style="text-align: center; color: #666;">Không tìm thấy video nào</p>';
-                return;
-            }
-
             searchResults.innerHTML = videos.map((video, index) => {
                 const videoUrl = `https://www.tiktok.com/@${video.author?.unique_id || 'user'}/video/${video.video_id}`;
                 const isAdded = urlList.includes(videoUrl);
                 
                 return `
-                    <div class="search-result-item">
-                        <img src="${video.cover || video.origin_cover}" alt="Video thumbnail" loading="lazy">
-                        <div class="search-result-info">
-                            <div class="search-result-title">${video.title || 'Không có tiêu đề'}</div>
-                            <div class="search-result-meta">👤 @${video.author?.unique_id || 'N/A'}</div>
-                            <div class="search-result-meta">❤️ ${formatNumber(video.digg_count || 0)} | 💬 ${formatNumber(video.comment_count || 0)}</div>
-                            <div class="search-result-meta">⏱️ ${video.duration || 0}s</div>
-                        </div>
-                        <div class="search-result-actions">
-                            <button class="add-search-btn ${isAdded ? 'added' : ''}" 
-                                    onclick="addSearchResult('${videoUrl}', ${index})"
+                    <div class="search-item">
+                        <img src="${video.cover || video.origin_cover}" alt="Video" loading="lazy">
+                        <div class="search-item-info">
+                            <div class="search-item-title">${video.title || 'Không có tiêu đề'}</div>
+                            <div class="search-item-meta">👤 @${video.author?.unique_id || 'N/A'}</div>
+                            <div class="search-item-meta">❤️ ${formatNumber(video.digg_count || 0)} | 💬 ${formatNumber(video.comment_count || 0)}</div>
+                            <button class="search-item-btn ${isAdded ? 'added' : ''}" 
+                                    onclick="addSearchResult('${videoUrl.replace(/'/g, "\\'")}', ${index})"
                                     ${isAdded ? 'disabled' : ''}>
-                                ${isAdded ? '✓ Đã thêm' : '+ Thêm vào danh sách'}
+                                ${isAdded ? '✓ Đã thêm' : '+ Thêm'}
                             </button>
                         </div>
                     </div>
@@ -460,19 +579,18 @@
         }
 
         function addSearchResult(url, index) {
-            if (urlList.includes(url)) {
-                return;
-            }
-
+            if (urlList.includes(url)) return;
+            
             urlList.push(url);
-            updateUrlList();
-
-            // Cập nhật nút thành "Đã thêm"
-            const buttons = document.querySelectorAll('.add-search-btn');
-            if (buttons[index]) {
-                buttons[index].textContent = '✓ Đã thêm';
-                buttons[index].classList.add('added');
-                buttons[index].disabled = true;
+            updateDownloadList();
+            
+            // Cập nhật nút
+            const items = document.querySelectorAll('.search-item');
+            if (items[index]) {
+                const btn = items[index].querySelector('.search-item-btn');
+                btn.textContent = '✓ Đã thêm';
+                btn.classList.add('added');
+                btn.disabled = true;
             }
         }
 
@@ -486,27 +604,27 @@
             }
 
             if (!url.includes('tiktok.com')) {
-                alert('Link không hợp lệ! Vui lòng nhập link TikTok.');
+                alert('Link không hợp lệ!');
                 return;
             }
 
             if (urlList.includes(url)) {
-                alert('Link này đã được thêm vào danh sách!');
+                alert('Link này đã được thêm!');
                 return;
             }
 
             urlList.push(url);
             input.value = '';
-            updateUrlList();
+            updateDownloadList();
         }
 
         function removeUrl(index) {
             urlList.splice(index, 1);
-            updateUrlList();
+            updateDownloadList();
         }
 
-        function updateUrlList() {
-            const container = document.getElementById('urlList');
+        function updateDownloadList() {
+            const container = document.getElementById('downloadList');
             const countSpan = document.getElementById('urlCount');
             const downloadBtn = document.getElementById('downloadAllBtn');
 
@@ -514,7 +632,7 @@
             downloadBtn.disabled = urlList.length === 0;
 
             if (urlList.length === 0) {
-                container.innerHTML = '';
+                container.innerHTML = '<p style="text-align: center; color: #999; padding: 10px;">Chưa có video nào</p>';
                 return;
             }
 
@@ -551,73 +669,4 @@
                         <div class="progress-bar">
                             <div class="progress-fill" style="width: 0%"></div>
                         </div>
-                        <div class="status loading">Đang xử lý...</div>
-                    </div>
-                `;
-
-                await downloadVideo(url, i, progressId);
-            }
-
-            downloadBtn.disabled = false;
-            
-            // Hiển thị nút tự động tải xuống nếu có video
-            if (downloadedVideos.length > 0) {
-                autoDownloadSection.style.display = 'block';
-                autoDownloadSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        }
-
-        async function downloadVideo(url, index, progressId) {
-            const progressItem = document.getElementById(progressId);
-            const progressFill = progressItem.querySelector('.progress-fill');
-            const statusDiv = progressItem.querySelector('.status');
-
-            try {
-                progressFill.style.width = '30%';
-                statusDiv.textContent = 'Đang lấy thông tin video...';
-
-                // API để tải video TikTok không watermark với HD quality
-                const apiUrl = `https://www.tikwm.com/api/?url=${encodeURIComponent(url)}&hd=1`;
-                
-                progressFill.style.width = '60%';
-                const response = await fetch(apiUrl);
-                const data = await response.json();
-
-                if (data.code !== 0 || !data.data) {
-                    throw new Error('Không thể lấy thông tin video');
-                }
-
-                progressFill.style.width = '100%';
-                statusDiv.className = 'status success';
-                statusDiv.textContent = 'Hoàn thành!';
-
-                // Lưu thông tin video để tải sau
-                downloadedVideos.push({
-                    data: data.data,
-                    index: index
-                });
-
-                displayVideoResult(data.data, index);
-
-            } catch (error) {
-                console.error('Error:', error);
-                progressFill.style.width = '100%';
-                statusDiv.className = 'status error';
-                statusDiv.textContent = 'Lỗi: ' + error.message;
-
-                const resultsDiv = document.getElementById('results');
-                resultsDiv.innerHTML += `
-                    <div class="video-card">
-                        <div class="status error">
-                            ❌ Không thể tải video ${index + 1}: ${error.message}
-                        </div>
-                    </div>
-                `;
-            }
-        }
-
-        async function downloadFileDirectly(url, filename) {
-            try {
-                const response = await fetch(url);
-                const blob = await response.blob();
-                const blobUrl = window.UR
+                        <div class="statu
